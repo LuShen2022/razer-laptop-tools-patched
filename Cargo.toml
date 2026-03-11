@@ -1,0 +1,17 @@
+[workspace]
+resolver = "2"
+members = [ "librazer", "bhelper"]
+
+[workspace.package]
+version = "0.8.2"
+
+[profile.release]
+lto = true
+strip = true
+codegen-units = 3
+
+[profile.dev]
+codegen-units = 1
+
+[profile.test]
+codegen-units = 1
