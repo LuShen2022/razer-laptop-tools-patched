@@ -28,31 +28,31 @@ jobs:
     - name: Update dependencies
       run: cargo update --manifest-path bhelper/Cargo.toml
 
-    # 4️⃣ 编译 bhelper.exe 并保存日志
+    # 4️⃣ 编译 bhelper.exe 并保存日志（使用 cargo install 生成标准 exe）
     - name: Build bhelper.exe and save log
       run: |
         mkdir -Force logs
         $ErrorActionPreference="Continue"
-        cargo build --release --manifest-path bhelper/Cargo.toml --verbose *> logs/build.log 2>&1 || echo "Compile failed, see logs/build.log"
+        cargo install --path bhelper --root bhelper/target/release *> logs/build.log 2>&1 || echo "Compile failed, see logs/build.log"
 
-    # 5️⃣ 列出生成文件（如果目录存在）
+    # 5️⃣ 列出生成文件
     - name: List release files
       run: |
-        if (Test-Path bhelper\target\release) {
-          dir bhelper\target\release
+        if (Test-Path bhelper\target\release\bin) {
+          dir bhelper\target\release\bin
         } else {
-          echo "Release directory does not exist"
+          echo "Release bin directory does not exist"
         }
 
-    # 6️⃣ 上传 release 目录下所有文件（包括 bhelper.exe）
+    # 6️⃣ 上传 bhelper.exe
     - name: Upload bhelper.exe
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: bhelper-exe
-        path: bhelper/target/release/*
+        path: bhelper/target/release/bin/bhelper.exe
 
-    # 7️⃣ 上传编译日志
+    # 7️⃣ 上传 build log
     - name: Upload build log
       uses: actions/upload-artifact@v4
       with:
