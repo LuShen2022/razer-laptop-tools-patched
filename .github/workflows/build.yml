@@ -20,11 +20,23 @@ jobs:
         profile: minimal
         override: true
 
+    - name: Update dependencies
+      run: cargo update --manifest-path librazer/Cargo.toml
+
     - name: Build blade-helper
       run: cargo build --release --manifest-path librazer/Cargo.toml
 
     - name: Upload blade-helper.exe
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: blade-helper-exe
-        path: librazer\target\release\blade-helper.exe
+        path: librazer/target/release/blade-helper.exe
+
+    - name: Build bhelper (optional)
+      run: cargo build --release --manifest-path bhelper/Cargo.toml
+
+    - name: Upload bhelper.exe
+      uses: actions/upload-artifact@v4
+      with:
+        name: bhelper-exe
+        path: bhelper/target/release/bhelper.exe
