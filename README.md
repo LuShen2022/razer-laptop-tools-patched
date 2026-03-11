@@ -1,3 +1,27 @@
+# Razer Laptop Tools (Personal Build)
+
+This repository is a personal build of the original project:
+
+https://github.com/stvnksslr/razer-laptop-tools
+
+I created this repository only to compile a Windows executable for my device.
+
+Device:
+Razer Blade 15" (2023)  
+Model: RZ09-0485  
+PID: 029e
+
+Changes:
+- Added device descriptor support for my Blade 15 (2023)
+- Added GitHub Actions workflow to automatically build `bhelper.exe`
+
+No major changes were made to the original project.
+
+All credits go to the original author:
+https://github.com/stvnksslr
+
+The original project license applies to this repository.
+
 # Razer Laptop Tools
 
 The plan here is to use the solid foundation of tdakhran to build something that follows a few core pillars
