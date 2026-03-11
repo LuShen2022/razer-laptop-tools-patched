@@ -44,13 +44,13 @@ jobs:
           echo "Release directory does not exist"
         }
 
-    # 6️⃣ 上传 bhelper.exe（如果生成了）
+    # 6️⃣ 上传 release 目录下所有文件（包括 bhelper.exe）
     - name: Upload bhelper.exe
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: bhelper-exe
-        path: bhelper/target/release/bhelper.exe
+        path: bhelper/target/release/*
 
     # 7️⃣ 上传编译日志
     - name: Upload build log
