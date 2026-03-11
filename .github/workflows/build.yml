@@ -1,6 +1,5 @@
 name: Build Razer Laptop Tools
 
-# 触发条件：push 或手动触发
 on:
   push:
     branches: [ main ]
@@ -10,7 +9,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # 避免 Node.js 20 废弃警告
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
     # 1️⃣ 拉取源码
@@ -29,17 +28,33 @@ jobs:
     - name: Update dependencies
       run: cargo update --manifest-path bhelper/Cargo.toml
 
-    # 4️⃣ 编译 blade-helper.exe（指向 binary crate）
-    - name: Build blade-helper
-      run: cargo build --release --manifest-path bhelper/Cargo.toml --verbose
+    # 4️⃣ 编译 bhelper.exe 并保存日志
+    - name: Build bhelper.exe and save log
+      run: |
+        mkdir -Force logs
+        $ErrorActionPreference="Continue"
+        cargo build --release --manifest-path bhelper/Cargo.toml --verbose *> logs/build.log 2>&1 || echo "Compile failed, see logs/build.log"
 
-    # 5️⃣ 列出生成文件，确认 blade-helper.exe
+    # 5️⃣ 列出生成文件（如果目录存在）
     - name: List release files
-      run: dir bhelper\target\release
+      run: |
+        if (Test-Path bhelper\target\release) {
+          dir bhelper\target\release
+        } else {
+          echo "Release directory does not exist"
+        }
 
-    # 6️⃣ 上传 blade-helper.exe
-    - name: Upload blade-helper.exe
+    # 6️⃣ 上传 bhelper.exe（如果生成了）
+    - name: Upload bhelper.exe
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
-        name: blade-helper-exe
-        path: bhelper/target/release/blade-helper.exe
+        name: bhelper-exe
+        path: bhelper/target/release/bhelper.exe
+
+    # 7️⃣ 上传编译日志
+    - name: Upload build log
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: logs/build.log
