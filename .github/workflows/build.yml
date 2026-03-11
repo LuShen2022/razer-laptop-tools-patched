@@ -27,32 +27,19 @@ jobs:
 
     # 3️⃣ 更新依赖
     - name: Update dependencies
-      run: cargo update --manifest-path librazer/Cargo.toml
+      run: cargo update --manifest-path bhelper/Cargo.toml
 
-    # 4️⃣ 构建 blade-helper.exe
+    # 4️⃣ 编译 blade-helper.exe（指向 binary crate）
     - name: Build blade-helper
-      run: cargo build --release --manifest-path librazer/Cargo.toml --verbose
+      run: cargo build --release --manifest-path bhelper/Cargo.toml --verbose
 
-    # 5️⃣ 列出编译目录确认 exe
-    - name: List blade-helper files
-      run: dir librazer\target\release
+    # 5️⃣ 列出生成文件，确认 blade-helper.exe
+    - name: List release files
+      run: dir bhelper\target\release
 
     # 6️⃣ 上传 blade-helper.exe
     - name: Upload blade-helper.exe
       uses: actions/upload-artifact@v4
       with:
         name: blade-helper-exe
-        path: librazer/target/release/blade-helper.exe
-
-    # 7️⃣ 可选：编译 bhelper.exe
-    # - name: Build bhelper
-    #   run: cargo build --release --manifest-path bhelper/Cargo.toml --verbose
-    #
-    # - name: List bhelper files
-    #   run: dir bhelper\target\release
-    #
-    # - name: Upload bhelper.exe
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: bhelper-exe
-    #     path: bhelper/target/release/bhelper.exe
+        path: bhelper/target/release/blade-helper.exe
